@@ -1,0 +1,24 @@
+1.create table copy_emp as select * from employee;
+
+2.create table deptdemo(dept_id,dname,manager_id)
+as select department_id,department_name,manager_id
+from departments;
+
+3.  create table empdemo(id constraint epk primary key,
+first_name constraint fnl not null,
+last_name constraint lnl not null,
+salary constraint sck check (salary>0),dept_id)
+as 
+select employee_id,first_name,last_name,salary,department_id
+from employees;
+
+4.trucate table empdemo; 
+ 
+5.drop table empdemo purge;
+
+6.create table empdemo(id number constraint my_emp_id_pk primary key,
+add columns as per your choice)
+
+7.create table deptdemo(id number constraint dept_id_pk primary key,
+add columns as per your choice)
+

@@ -1,0 +1,44 @@
+db.Employee.insert({Id:11,Name:"Tom"})
+
+db.Employee.insert({Id:12,Name:"Sam",Salary:2000})
+
+db.Employee.insert({Id:13,Name:"Harry",
+ Qualification:{Degree:"BE",University:"Pune",Grade:"A"}
+})
+
+
+db.Employee.insertMany([
+  {Id:14,Name:"Jerry",Salary:23000},
+  {Id:15,Name:"Merry",Bdate:"12-Apr-08"},
+  {Id:16,Name:"Rock"}
+])
+------------------------------------------------------------
+
+  db.getCollection('Employee').find({})
+
+ db.getCollection('Employee').find({},{Name:1,_id:0})
+
+ db.getCollection('Employee').find({Name:{$eq:"Tom"}},{Name:1,_id:0})
+-----------------------------------------------------------------
+
+  db.Employee.remove({Name:"Tom"})
+
+  db.Employee.remove({Name:"Merry"},1)
+OR  
+  db.Employee.deleteOne({Name:"Merry"})
+--------------------------------------------------------------------
+
+db.Employee.update({Id:12},{$set:{Salary:4000}})
+
+-------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+

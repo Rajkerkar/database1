@@ -1,0 +1,77 @@
+1. initially create procedure:
+CREATE OR REPLACE PROCEDURE check_salary (the_job VARCHAR2, the_salary  NUMBER) IS
+minsal jobs.min_salary%type;  maxsal jobs.max_salary%type;
+BEGIN
+SELECT min_salary, max_salary 
+INTO minsal, maxsal  
+FROM jobs
+WHERE job_id = UPPER(the_job);
+
+IF the_salary NOT BETWEEN minsal AND maxsal 
+THEN  
+	RAISE_APPLICATION_ERROR(-20100,'Invalid salary $'||the_salary||'. '||
+'Salaries for job '|| the_job ||' must be between $'|| minsal ||' and $' || maxsal);  END IF;
+END;
+/
+
+Now,  create trigger on copy_emp table::
+
+CREATE OR REPLACE TRIGGER check_salary_trg  
+BEFORE INSERT OR UPDATE 
+OF job_id, salary  
+ON copy_emp
+FOR EACH ROW  
+BEGIN
+check_salary(:new.job_id, :new.salary);
+END;
+/
+
+Test above trigger by updating salary in copy_emp table to 8000 for job_id MK_MAN. (As an output you should get an error for salary)
+begin
+  update copy_emp
+  set salary = 8000
+  where job_id='MK_MAN';
+end;
+/
+
+
+2.
+
+CREATE OR REPLACE TRIGGER delete_emp_trg  
+BEFORE DELETE 
+ON copy_emp
+
+DECLARE
+the_day VARCHAR2(3) := TO_CHAR(SYSDATE, 'DY');
+the_hour number := TO_NUMBER(TO_CHAR(SYSDATE, 'HH24'));  
+
+BEGIN
+IF (the_hour BETWEEN 9 AND 18) 
+	AND 
+	(the_day NOT IN ('SAT','SUN')) 
+ THEN  
+RAISE_APPLICATION_ERROR(-20150,
+'Employee records cannot be deleted during the week 9am and 6pm');
+END IF;
+END;
+/
+
+Now, try deleting employee from copy_emp
+
+begin
+  delete from copy_emp
+  where employee_id =206 ;
+end;
+/
+Now try deleteing::
+
+Ouput::  this should be the error 
+
+SQL> @F:\Database\demo.sql
+begin
+*
+ERROR at line 1:
+ORA-20150: Employee records cannot be deleted during the week 9am and 6pm
+ORA-06512: at "HR.DELETE_EMP_TRG", line 10
+ORA-04088: error during execution of trigger 'HR.DELETE_EMP_TRG'
+ORA-06512: at line 2

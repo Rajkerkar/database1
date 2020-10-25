@@ -1,0 +1,157 @@
+ I. Anonymous Block::
+
+1.SET SERVEROUTPUT ON  BEGIN
+DBMS_OUTPUT.PUT_LINE('Hello World');
+END;
+
+   2. set serveroutput on
+declare
+    sal number;
+begin
+  select max(salary)
+  into sal
+  from employees;
+
+   DBMS_OUTPUT.PUT_LINE('Max sal :: '||sal);
+END;
+/
+
+3. set serveroutput on
+declare
+    sal number;
+    eid number;
+    name varchar2(20);
+begin
+  select employee_id,last_name,salary
+  into eid,name,sal
+  from employees
+  where salary = ( select max(salary)
+		   from employees);
+
+   DBMS_OUTPUT.PUT_LINE('Details::'||eid||' '||name||' '||sal);
+END;
+/
+
+4.
+set serveroutput on
+declare
+    sal number;
+    eid number:=&eid;
+    name varchar2(20);
+begin
+  select employee_id,last_name,salary
+  into eid,name,sal
+  from employees
+  where employee_id=eid;
+
+   DBMS_OUTPUT.PUT_LINE('Details::'||eid||' '||name||' '||sal);
+END;
+/
+
+5.
+set serveroutput on
+declare
+ n number;
+begin
+  FOR n in 1..10
+    LOOP
+       DBMS_OUTPUT.PUT_LINE(n);
+    END LOOP;
+END;
+/
+
+6.set serveroutput on
+declare
+ n number:=&n;
+ flag number:=0;
+ rem number;
+ i number;
+begin
+  FOR i in 2..(n-1)
+    LOOP
+       rem:= MOD(n,i);
+       IF (rem=0) THEN
+		flag:=1;
+		exit;
+	END IF;
+    END LOOP;
+
+   IF flag=0 THEN
+      DBMS_OUTPUT.PUT_LINE('  Prime Number');
+   ELSE
+      DBMS_OUTPUT.PUT_LINE(' NOT Prime Number');
+   END IF;
+END;
+/
+
+7.
+set serveroutput on
+declare
+ n number:=&n;
+ flag number:=0;
+ rem number;
+ add number:=0;
+ temp number;
+cube number;
+begin
+    temp:=n;
+    while n>0 LOOP
+       rem:= MOD(n,10);
+       n:=trunc(n/10);
+	cube:=rem*rem*rem;
+	add := add+cube; 
+    END LOOP;
+
+   IF add=temp THEN
+      DBMS_OUTPUT.PUT_LINE('  Armstrong Number');
+   ELSE
+      DBMS_OUTPUT.PUT_LINE(' NOT Armstrong Number');
+   END IF;
+END;
+/
+
+8.
+set serveroutput on
+declare
+ radius number:=&r;
+ area number:=0;
+ circumference number;
+begin
+   area:= radius*radius*3.14;
+   circumference := radius*3.14*2;   
+ 
+      DBMS_OUTPUT.PUT_LINE('Area:: '||area);
+      DBMS_OUTPUT.PUT_LINE('Circumference:: '||circumference);
+   
+END;
+/
+
+9.
+set serveroutput on
+declare
+ n number:=&n;
+begin
+   
+    IF MOD(n,2)=0 THEN 
+      DBMS_OUTPUT.PUT_LINE('Even');
+    ELSE
+      DBMS_OUTPUT.PUT_LINE('Odd');
+    END IF;
+   
+END;
+/
+
+10.
+declare
+    sal number;
+    eid number;
+    name varchar2(20);
+begin
+  select employee_id,last_name,salary
+  into eid,name,sal
+  from employees
+  where manager_id IS NULL;
+
+   DBMS_OUTPUT.PUT_LINE('Details::'||eid||' '||name||' '||sal);
+END;
+/

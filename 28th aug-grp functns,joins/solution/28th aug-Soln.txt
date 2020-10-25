@@ -1,0 +1,59 @@
+1. select max(salary)
+from employees
+where department_id=20;
+
+2. select min(hire_date)
+from employees;
+
+3. select avg(nvl(salary,0))
+from employees;
+
+4.select count(commission_pct)
+from employees;
+
+5.select department_id,max(salary)
+from employees
+group by department_id;
+
+6. select department_id,min(salary)
+from employees
+group by department_id
+having min(salary) <7000;
+
+7. select job_id,count(job_id)
+from employees
+group by job_id;
+
+8.  select count(job_id)
+from employees
+where job_id LIKE '%&job%';
+
+9. select max(salary),min(salary),max(salary)-min(salary) difference
+from employees;
+
+10.  select manager_id,min(salary) sal
+from employees
+group by manager_id
+having manager_id IS NOT NULL
+AND
+min(salary) >6000
+order by sal desc;
+
+OR
+
+select manager_id,min(salary) sal
+from employees
+where manager_id IS NOT NULL
+group by manager_id
+having min(salary) >6000
+order by sal desc;
+
+11 . select count(employee_id)
+from employees
+where hire_date like '%95'
+OR
+hire_date like '%96'
+or
+hire_date like '%97'
+or
+hire_date like '%98' ;

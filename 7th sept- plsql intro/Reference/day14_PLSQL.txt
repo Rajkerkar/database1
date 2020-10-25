@@ -1,0 +1,232 @@
+		Anonymous Block::
+
+SET SERVEROUTPUT ON
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Hello World');  
+
+END;
+/
+--------------------------------------------------
+SET SERVEROUTPUT ON
+DECLARE
+  num number;
+  name varchar2(20);
+BEGIN
+    num :=10;
+    name:= 'Tom';
+    DBMS_OUTPUT.PUT_LINE('Id:: '||num||' Name:: '||name);  
+
+END;
+/
+-------------------------------------------------------
+
+DECLARE
+   eid number;
+   ename varchar2(20);
+BEGIN
+    select employee_id,last_name
+    INTO eid,ename
+    from employees
+    where employee_id=100;
+
+    DBMS_OUTPUT.PUT_LINE('ID :: '||eid||' name:: '||ename);
+
+END;
+/
+		---------OR-----------
+
+DECLARE
+   eid number;
+   ename employees.last_name%TYPE;
+BEGIN
+    select employee_id,last_name
+    INTO eid,ename
+    from employees
+    where employee_id=100;
+
+    DBMS_OUTPUT.PUT_LINE('ID :: '||eid||' name:: '||ename);
+
+END;
+/
+-----------------------------------------------------------------
+			BIND Variable::
+
+--variable sal number;
+
+
+DECLARE
+   eid number;
+   ename employees.last_name%TYPE;
+BEGIN
+    select employee_id,last_name,salary
+    INTO eid,ename,:sal
+    from employees
+    where employee_id=100;
+
+    DBMS_OUTPUT.PUT_LINE('ID :: '||eid||' name:: '||ename||' Salary:: '||:sal);
+
+END;
+/
+--------------------------------------------------------------------------
+		Using functions from SQL::
+
+DECLARE
+   eid number;
+   ename employees.last_name%TYPE;
+   hire_date date:= to_date('07,September 2020','DD,Month YYYY');
+BEGIN
+    select employee_id,last_name,hire_date
+    INTO eid,ename,hire_date
+    from employees
+    where employee_id=100;
+
+    DBMS_OUTPUT.PUT_LINE('ID :: '||eid||' name:: '||ename||' Hire_date:: '||hire_date);
+
+END;
+/
+----------------------------------------------------------------------
+BEGIN
+   insert into emp_demo
+   values(15,'Rocky',4000,'13-FEB-10',100,null);
+
+   commit;
+END;
+/
+---------------------------------------------------------------------
+		IF-ELSE
+
+DECLARE
+  num number:=&n;
+BEGIN
+    IF num>0 THEN
+ 	DBMS_OUTPUT.PUT_LINE('   POSITIVE   ');
+    ELSE
+ 	DBMS_OUTPUT.PUT_LINE('   NEGATIVE   ');
+    END IF;
+
+END;
+/
+
+------------------------------------------------------
+		BASIC LOOP::
+DECLARE
+  n number:=1;
+BEGIN
+    LOOP
+      DBMS_OUTPUT.PUT_LINE(' '||n); 
+      n := n+1;
+      EXIT WHEN n>=11 ;    
+    END LOOP;
+  
+END;
+/
+-----------------------------------------------------
+		WHILE LOOP::
+
+DECLARE
+  n number:=1;
+BEGIN
+    WHILE n<=10 LOOP
+      DBMS_OUTPUT.PUT_LINE(' '||n); 
+      n := n+1;    
+    END LOOP;
+  
+END;
+/
+------------------------------------------------------
+		FOR LOOP::
+
+DECLARE
+  n number:=1;
+BEGIN
+  FOR n IN 1..10 
+   LOOP
+     DBMS_OUTPUT.PUT_LINE('   '||n);
+  END LOOP;
+      
+  
+END;
+/
+-----------------------------------------------------
+DECLARE
+  n number:=1;
+BEGIN
+  FOR n IN REVERSE 1..10 
+   LOOP
+     DBMS_OUTPUT.PUT_LINE('   '||n);
+  END LOOP;
+      
+  
+END;
+/-
+---------------------------------------------------------
+		BEGIN and EXIT::
+
+DECLARE
+  n number:=1;
+BEGIN
+   LOOP
+     DBMS_OUTPUT.PUT_LINE('   '||n);
+     n:=n+1;
+     IF n <=10  THEN
+        CONTINUE;  -- WHEN n<=10;
+     END IF;
+       EXIT WHEN n>10;
+  
+  END LOOP;
+      
+  
+END;
+/
+------------------------------------------
+		Explicit cursor::
+
+DECLARE
+   eid number;
+   ename varchar2(20);
+
+   CURSOR emp_king IS
+    select employee_id,last_name
+    from employees
+    where last_name = 'King';
+   
+BEGIN
+    
+    OPEN emp_king;
+    
+    LOOP 
+    FETCH emp_king 
+    into eid,ename;
+        EXIT WHEN emp_king%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE('ID :: '||eid||' name:: '||ename);
+    END LOOP;
+
+    CLOSE emp_king;
+END;
+/
+----------------------------------------------------------------
+		CURSOR FOR LOOP::
+
+DECLARE
+   
+   CURSOR emp_king IS
+    select employee_id,last_name
+    from employees
+    where last_name = 'King';
+   
+BEGIN
+    --emp is like a var_name and is a temporary var called as "RECORD"
+    FOR emp IN emp_king 
+    LOOP
+       DBMS_OUTPUT.PUT_LINE('ID :: '||emp.employee_id||
+     ' name:: '||emp.last_name);
+    END LOOP;
+
+END;
+/
+-------------------------------------------------------------------
+
+
+
+

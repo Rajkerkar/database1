@@ -1,0 +1,45 @@
+------->dual is a dummy table when you are actually not retriving data from database<-------
+
+To select specific word length for word...where 1=G,m=6
+
+select substr('Good morning',1,6)
+from dual;
+-----------------------------------------------------------------
+To print the position of word.....where o is the word for which position is to be printed
+
+select instr('Good morning','o')
+from dual;
+-------------------------------------------------------------------
+To print length of the string
+
+select length('Good morning')
+from dual;
+-------------------------------------------------------------------
+To replace one word with other...where J=word to be replaced,BL=replaced word
+
+select replace('Jack and Jue','J','Bl')
+from dual;
+--------------------------------------------------------------------
+To display selected data in upper or lower case
+
+select upper(last_name),lower(last_name)
+from employees
+where department_id=90;
+---------------------------------------------------------------------
+To display only the first letter of the word capital
+
+select initcap(last_name)
+from employees
+where department_id=90;
+--------------------------------------------------------------------
+To concatinate two strings
+
+select concat('Hello','World')
+from dual;
+-------------------------------------------------------------------
+To right pad the salary with **** with 10 digits.
+
+select rpad(salary,10,'*')
+from employees;
+-----------------------------------------------------------------------
+

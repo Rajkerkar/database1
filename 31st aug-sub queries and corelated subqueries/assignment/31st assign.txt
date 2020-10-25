@@ -1,0 +1,41 @@
+
+3)error....
+
+select last_name,department_id,salary
+from employees
+where department_id =(select department_id
+		     from employees
+		     where last_name='Taylor')
+		and salary<ANY(select salary
+ 		    from employees
+		    where last_name='Taylor');
+-------------------------------------------------------------------------------------------
+4)
+
+select last_name,employee_id,salary
+from employees
+where salary =(select min(salary)
+		from employees);
+
+-------------------------------------------------------------------------------------------
+5)error...
+
+select department_id,last_name,salary
+from employees
+where salary IN(select max(salary)
+from employees
+group by department_id)
+and salary>10000
+order by department id;
+--------------------------------------------------------------------------------------------
+6)doubt....
+
+select employee_id,last_name,department_id,salary
+from employees e1
+where salary IN(select max(salary)
+	      from employees e2
+	      group by department_id
+		having e1.department_id=e2.department_id)
+		order by department_id;
+--------------------------------------------------------------------------------------------
+7)

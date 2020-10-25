@@ -1,0 +1,70 @@
+1.select last_name
+from employees
+where last_name like 'A%';
+
+2.select first_name
+from employees
+            where last_name like '%e%';
+
+     3. select last_name
+from employees
+           where last_name like '%_s';
+
+4. select last_name,hire_date
+from employees
+        where hire_date like '%MAR%';
+
+5.select last_name,salary,job_id
+from employees
+where job_id like '%REP%';
+
+6.select last_name
+from employees
+where last_name like '%_a_';
+
+7. select first_name,last_name
+from employees
+where concat(first_name,last_name) like '%a%'
+and concat(first_name,last_name) like '%e%';
+
+8.select last_name,salary,commission_pct
+from employees
+where commission_pct IS NULL;
+
+9.select last_name,salary
+from employees
+where salary NOT BETWEEN 5000 AND 12000;
+
+10.select last_name,job_id,hire_date
+from employees
+where last_name ='Matos'
+OR last_name = 'Taylor'
+order by hire_date;
+
+11. select last_name,department_id
+from employees
+where department_id=20
+OR department_id=50
+order by last_name;
+
+   12.  select last_name,salary,department_id
+from employees
+where (salary between 5000 and 17000)
+and
+(department_id=20
+OR department_id=50)
+order by salary desc;
+
+  13.  select employee_id,last_name,salary,department_id
+from employees
+where department_id = &did;
+
+  14. select employee_id,last_name,salary,department_id
+from employees
+where salary= &sal
+order by &col;
+
+15.  select employee_id,last_name,salary,department_id
+from employees
+where salary = &sal
+order by &col;

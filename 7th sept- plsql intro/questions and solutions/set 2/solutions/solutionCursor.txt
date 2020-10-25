@@ -1,0 +1,277 @@
+II. Cursors
+1.
+declare
+    sal number;
+    eid number;
+    name varchar2(20);
+   
+   cursor emp_king IS
+     select employee_id,last_name,salary
+     from employees
+     where last_name='King';
+begin
+   OPEN emp_king;
+   
+   LOOP
+    FETCH emp_king 
+       into eid,name,sal;
+    EXIT WHEN emp_king%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||eid||' '||name||' '||sal);
+   
+   END LOOP;
+  CLOSE emp_king;
+
+END;
+/
+
+2.
+declare
+    fname employees.first_name%type;
+    eid number;
+    lname employees.last_name%type;
+   
+   cursor emp IS
+     select employee_id,first_name,last_name
+     from employees e1
+     where 2<=( select count(first_name)
+                from employees e2
+		where e1.last_name=e2.last_name)
+     order by last_name;
+begin
+   OPEN emp;
+   
+   LOOP
+    FETCH emp 
+       into eid,fname,lname;
+    EXIT WHEN emp%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||eid||' '||fname||' '||lname);
+   
+   END LOOP;
+  CLOSE emp;
+
+END;
+/
+
+3.
+declare
+    did number:=&did;
+   
+   cursor emp_details IS
+     select employee_id,first_name,last_name,department_id
+     from employees 
+     where department_id=did;
+
+     emp emp_details%ROWTYPE;
+
+begin
+   OPEN emp_details;
+   
+   LOOP
+    FETCH emp_details 
+       into emp;
+    EXIT WHEN emp_details%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||emp.employee_id||' '||
+       emp.first_name||' '||emp.last_name||' '||emp.department_id);
+   
+   END LOOP;
+  CLOSE emp_details;
+
+END;
+/
+
+
+4.
+declare
+      
+   cursor emp_sal IS
+     select max(salary)
+     from employees
+     group by department_id
+     order by max(salary);
+
+     sal number;
+
+begin
+   OPEN emp_sal;
+   
+   LOOP
+    FETCH emp_sal 
+       into sal;
+    EXIT WHEN emp_sal%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE(sal);
+   
+   END LOOP;
+  CLOSE emp_sal;
+
+END;
+/
+
+
+5.
+declare
+      
+   cursor emp_sal IS
+     select employee_id,last_name,department_id,salary
+     from employees e1
+     where salary =(select max(salary)
+		    from employees e2
+		    group by department_id
+		    having e2.department_id=e1.department_id);
+
+     emp emp_sal%ROWTYPE;
+
+begin
+   OPEN emp_sal;
+   
+   LOOP
+    FETCH emp_sal 
+       into emp;
+    EXIT WHEN emp_sal%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||emp.employee_id||' '||
+       emp.last_name||' '||emp.salary||' '||emp.department_id);
+   
+   END LOOP;
+  CLOSE emp_sal;
+
+END;
+/
+
+6.
+declare
+      
+   cursor emp_loc IS
+     	select last_name,job_id,department_id,department_name
+	from employees
+	join departments
+	using(department_id)
+	join locations
+	using(location_id)
+	where city='Toronto';
+     
+    emp emp_loc%ROWTYPE;
+
+begin
+   OPEN emp_loc;
+   
+   LOOP
+    FETCH emp_loc 
+       into emp;
+    EXIT WHEN emp_loc%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.last_name||' '||emp.job_id||' '||
+emp.department_id||' '||emp.department_name);
+   
+   END LOOP;
+  CLOSE emp_loc;
+
+END;
+/
+
+7.
+declare
+      
+   cursor emp_aug IS
+     	select last_name,job_id,department_id,hire_date
+	from employees
+	where hire_date like '%AUG%';
+     
+    emp emp_aug%ROWTYPE;
+
+begin
+   OPEN emp_aug;
+   
+   LOOP
+    FETCH emp_aug 
+       into emp;
+    EXIT WHEN emp_aug%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.last_name||' '||emp.job_id||' '||
+emp.department_id||' '||emp.hire_date);
+   
+   END LOOP;
+  CLOSE emp_aug;
+
+END;
+/
+
+8.
+declare
+      
+   cursor emp_loc IS
+     	select employee_id,first_name||' '||last_name as name,job_id,department_name,city
+	from employees
+	join departments
+	using(department_id)
+	join locations
+	using(location_id)
+	where city='&city';
+     
+    emp emp_loc%ROWTYPE;
+
+begin
+   OPEN emp_loc;
+   
+   LOOP
+    FETCH emp_loc 
+       into emp;
+    EXIT WHEN emp_loc%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.employee_id||' '||emp.name||' '||emp.job_id||' '||
+emp.department_name||' '||emp.city);
+  
+   END LOOP;
+  CLOSE emp_loc;
+
+END;
+/
+
+9.
+
+declare
+      
+   cursor jobchange IS
+	select employee_id,job_id
+	from employees
+	intersect
+	select employee_id,job_id
+	from job_history;
+     
+    emp jobchange%ROWTYPE;
+
+begin
+   OPEN jobchange;
+   
+   LOOP
+    FETCH jobchange 
+       into emp;
+    EXIT WHEN jobchange%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.employee_id||' '||emp.job_id);
+  
+   END LOOP;
+  CLOSE jobchange;
+
+END;
+/
+
+10.
+declare
+      
+   cursor emp_sal IS
+     select employee_id,last_name,department_id,salary
+     from employees e1
+     where salary Between 10000 and 20000;
+
+     emp emp_sal%ROWTYPE;
+
+begin
+   OPEN emp_sal;
+   
+   LOOP
+    FETCH emp_sal 
+       into emp;
+    EXIT WHEN emp_sal%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||emp.employee_id||' '||
+       emp.last_name||' '||emp.salary||' '||emp.department_id);
+   
+   END LOOP;
+  CLOSE emp_sal;
+
+END;
+/

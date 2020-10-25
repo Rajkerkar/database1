@@ -1,0 +1,121 @@
+
+--using column level syntax::
+
+create table department(dept_id number constraint dept_pk primary key,
+dname varchar2(20) constraint dept_nl not null,
+location varchar2(20));
+
+create table employee(emp_id number constraint emp_pk primary key,
+ename varchar2(20) constraint emp_nl not null,
+salary number constraint emp_ck check(salary>0),
+email_id varchar2(15) constraint emp_un unique,
+dept_id number constraint emp_fk references department(dept_id),
+constraint emp_email_check check(email_id LIKE '%@%'));
+
+table level syntax for foreign key::
+create table employee(emp_id number constraint emp_pk primary key,
+ename varchar2(20) constraint emp_nl not null,
+salary number constraint emp_ck check(salary>0),
+email_id varchar2(15) constraint emp_un unique,
+dept_id number,job_id varchar2(10),
+ constraint emp_fk foreign key(dept_id) references department(dept_id),
+);
+
+---- ON DELETE CASCADE-----
+
+create table employee(emp_id number constraint emp_pk primary key,
+ename varchar2(20) constraint emp_nl not null,
+salary number constraint emp_ck check(salary>0),
+email_id varchar2(15) constraint emp_un unique,
+dept_id number constraint emp_fk references department(dept_id) 
+on delete cascade,
+constraint emp_email_check check(email_id LIKE '%@%'));
+
+-----------------------------------------------------------------------------
+--insert into department
+--values(&did,'&dname','&loc');
+
+insert into employee
+values(&id,'&name',&sal,'&email',&did);
+
+commit;
+-------------------------------------------------------------
+		ALTER TABLE:: (DDL)
+
+alter table employee
+ADD
+(join_date datealter DEFAULT sysdate);
+
+alter table employee
+MODIFY
+(email_id varchar2(20));
+---------------------------------------------------------
+descr dictionary
+
+select table_name
+from dictionary
+where lower(table_name)='user_tables';
+
+select table_name
+from user_tables;
+
+descr user_constraints
+------------------------------------------------------------
+                    Views:: (DDL)
+
+create or replace view 
+emp_vu(emp_id,ename,sal)
+AS
+select employee_id,concat(first_name,concat(' ',last_name)),salary
+from employees
+where department_id=90;
+
+
+drop view emp_vu;
+------------------------------------
+create table
+drop----1
+
+create table
+drop----2
+ 
+create table
+drop----3
+
+flashback-->then only last dropped will be recovered
+
+
+eg::
+
+   flashback table employee to before drop;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

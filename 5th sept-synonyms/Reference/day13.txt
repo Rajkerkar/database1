@@ -1,0 +1,127 @@
+create sequence seq
+increment by 1
+start with 1
+maxvalue 5
+nocache 
+nocycle;
+
+O/p:
+select seq.nextval from dual;
+1
+llly,
+2
+3
+4
+5
+select seq.nextval from dual;
+ ERROR: nextval exceeds maxvalue
+-----------------------------------------------------
+
+drop sequence seq;
+------------------------------------------------------
+
+create sequence seq
+increment by 1
+start with 1
+maxvalue 5
+nocache 
+cycle;
+
+O/P:
+1
+2
+3
+4
+5
+1
+----------------------------------------------------
+
+create index emp_idx
+on employee(ename);
+
+select index_name,index_type,table_name,include_column
+from user_indexes
+where lower(index_name)='emp_idx';
+
+drop index idx;
+-----------------------------------------------------------
+create synonym e
+FOR employee;
+
+select * from e;
+
+drop synonym e;
+-------------------------------------------------------
+select department_id,job_id,sum(salary)
+from employees
+group by rollup(department_id,job_id);
+
+
+select department_id,job_id,sum(salary)
+from employees
+group by cube(department_id,job_id);
+
+
+select department_id,job_id,sum(salary),
+grouping(department_id) did,grouping(job_id) jid
+from employees
+group by cube(department_id,job_id);
+
+--------------------------------------------------------
+create user Ram identified ram123;
+-------------------------------------------------
+create ROLE manager;
+
+GRANT create table,create view
+to manager;
+
+GRANT manager to Arvind;
+------------------------------------------------
+SQL> create role demo;
+
+Role created.
+
+SQL> grant create table , create view to demo;
+
+Grant succeeded.
+
+SQL> grant demo to dac1;
+
+Grant succeeded.
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+1:
+select department_id,job_id
+from employees
+where job_id<>'ST_CLERK'
+minus
+select department_id,TO_CHAR(NULL) job
+from departments
+
+2:
+select location_id,locations.country_id,Country_name
+from locations inner join countries on locations.country_id = countries.country_id
+minus
+select location_id,to_char(NULL),to_char(NULL)
+from departments
+
+3:
+select job_id,department_id
+from employees
+where department_id IN(10,50,20)
+minus
+select to_char(null),department_id
+from departments;
+
+4:
+select employee_id,job_id
+from employees
+intersect
+select employee_id,job_id
+from job_history
+
+
+5:
+select last_name,department_id,to_char(null) dname
+from employees
+union
+select to_char(null),department_id,to_char(null) department_name
+from departments

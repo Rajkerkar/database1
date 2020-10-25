@@ -1,0 +1,46 @@
+Converstion Functions
+
+1. select round(to_date('11-JUL-87','DD-MON-RR'),'MONTH')
+from dual;
+2.  select employee_id,last_name,to_char(salary,'$99,999')
+from employees;
+
+3. select to_char(hire_date,'fmDDth " of " MONTH " in " YYYY')
+from employees;
+
+4. select employee_id,salary,commission_pct,s(salary+NVL(commission_pct,0))*12 annual_sal
+from employees;
+
+5. select employee_id,(salary+NVL(commission_pct,0))*12 ann_sal,
+nvl2(commission_pct,'sal+comm','sal') Earns
+from employees;
+
+6.select employee_id,last_name,salary,(salary+2000)+NVL(commission_pct,0) increment_sal
+from employees;
+
+7. select last_name||q'< earn's >'||salary||' monthly but wants '||salary*3 as "Dreams Salaries"
+from employees;
+
+8.  select last_name,hire_date,
+to_char(next_day(add_months(hire_date,6),'Monday'),'Day," the " ddspth " of " MONTH,YYYY') "Review Date"
+from employees;
+
+9. select last_name,hire_date,to_char(hire_date,'DAY') Day
+from employees
+order by decode(to_char(hire_date,'DAY'),'monday',1,
+'tuesday',2,
+'wednesday',3,
+'thrusday',4,
+'friday',5,
+'saturday',6,
+'sunday',7,
+0)
+
+10.   select nvl2(to_char(commission_pct),'no comm') comm
+        from employees;
+
+11.  select distinct job_id, decode (job_id,'AD_PRES','A',
+                         'ST_MAN','B',
+                          'IT_PROG','C',
+		0)  AS  Grade
+from employees;

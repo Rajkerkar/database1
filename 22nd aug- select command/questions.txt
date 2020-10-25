@@ -1,0 +1,24 @@
+Session I
+
+1. Install oracle on your machine.(Refer sql_setup.doc)
+
+2. Create database using shared sql files.(demobld.sql,  DEMOBLD7.SQL,   HR.sql    )
+
+
+Session II
+
+Select statement
+
+    Display table structure for table employees and departments.
+
+    Check all table names available in your schema.
+
+    Display all employees data
+    Display all data from departments tabledes
+    Display employee_id, last_name,annual salary for all employees also display column heading as "Annual Salary"
+    Display unique job code from employees table
+    Write a query to display commission value for employees who earn it and 'NULL' should be displayed for employees who do not earn,rename column as "comm"
+    Write a query to display employee's full name seperated by space.
+    Write a query to display last_name and job_id as follows   eg: King is working as manager and name the column as "Employee Details"
+    Display only unique departments from employees table
+    Display unique departments and employee_id,last_name,salar

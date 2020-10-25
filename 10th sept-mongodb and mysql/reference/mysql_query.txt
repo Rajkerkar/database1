@@ -1,0 +1,21 @@
+select emp_id,emp_name,dept_id,Dname
+from employee
+INNER JOIN
+department
+using(dept_id);
+
+
+select Emp_id,Ename,e.dept_id,Dname
+from employee e
+INNER JOIN
+department d
+on(e.dept_id=d.Dept_id);
+
+------------------------------------------
+select emp_id,emp_name,dept_id,Dname
+from employee
+LEFT JOIN   --LEFT OUTER JOIN
+department
+using(dept_id);
+
+---left/ right/ cross

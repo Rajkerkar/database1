@@ -1,0 +1,160 @@
+declare
+   eid number;
+   name varchar2(20);
+begin
+  select employee_id,last_name
+  into eid,name
+  from employees
+  where last_name='King';
+
+  DBMS_OUTPUT.PUT_LINE('EID:: '||eid||' name::'||name);
+
+  EXCEPTION
+    WHEN TOO_MANY_ROWS THEN
+	DBMS_OUTPUT.PUT_LINE('EXCEPTION::Multiple employees with same name');
+
+end;
+/
+
+-----------------------------------------------------------
+declare
+   eid number;
+   name varchar2(20);
+begin
+  select employee_id,last_name
+  into eid,name
+  from employees
+  where last_name='&name';
+
+  DBMS_OUTPUT.PUT_LINE('EID:: '||eid||' name::'||name);
+
+  EXCEPTION
+    WHEN TOO_MANY_ROWS THEN
+	DBMS_OUTPUT.PUT_LINE('EXCEPTION::Multiple employees with same name');
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('EXCEPTION:: Invalid name...');
+
+end;
+/
+
+ ---------------------------------------------------------------------
+declare
+   eid number:=&eid;
+   name varchar2(20);
+   sal number:=&new_sal;
+
+   sal_exp EXCEPTION;
+begin
+  
+  IF sal<1000 THEN
+      raise sal_exp;
+  END IF;
+
+  update emp_demo
+  set salary=sal
+  where empid=eid;
+
+  commit;
+
+  EXCEPTION
+    WHEN sal_exp THEN
+       DBMS_OUTPUT.PUT_LINE('EXCEPTION:: Salary must be >1000');
+
+end;
+/
+------------------------------------------------------------------
+declare
+   eid number;
+   name varchar2(20);
+begin
+  select employee_id,last_name
+  into eid,name
+  from employees
+  where last_name='&name';
+
+  DBMS_OUTPUT.PUT_LINE('EID:: '||eid||' name::'||name);
+
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      DBMS_OUTPUT.PUT_LINE('no employee with this name');
+    WHEN OTHERS THEN
+      DBMS_OUTPUT.PUT_LINE('Some invalid exception occurred');
+
+end;
+/
+---------------------------------------------------------
+		TRIGGERS::
+
+create or replace trigger emp_sal_update 
+BEFORE UPDATE 
+ON emp_demo FOR EACH ROW
+BEGIN
+  
+  insert into emp_history
+  values(:old.empid,:old.salary);
+
+END;
+/
+
+begin
+   update emp_demo
+   set salary = 6000
+   where empid=15;
+
+   commit;
+end;
+/
+-----------------------------------------------------------
+create table users(user_id varchar2(20),password varchar2(10) default 'pune@123');
+
+create or replace trigger user_details
+after insert
+on emp_demo
+FOR EACH ROW
+begin
+  insert into users
+  values(concat(:new.empname,'123'),default);
+end;
+/
+
+begin
+   insert into emp_demo
+   values(&eid,'&ename',&sal,'&join_date',&did,&mid);
+end;
+/
+----------------------------------------------------------------
+        statement level trigger::
+
+
+create or replace trigger log_details
+before insert 
+on emp_demo
+begin
+   if to_char(sysdate,'DY')='WED' THEN
+     RAISE_APPLICATION_ERROR(-20202,'WARNING:: Cannot insert new record ');
+   end if;
+
+end;
+/
+
+insert into emp_demo(empid,empname)
+values(18,'Rocky');
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

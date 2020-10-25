@@ -1,0 +1,67 @@
+1.
+CREATE OR REPLACE PROCEDURE add_job (
+jobid jobs.job_id%TYPE,
+jobtitle jobs.job_title%TYPE) IS  BEGIN
+INSERT INTO jobs(job_id,job_title)  VALUES (jobid, jobtitle);
+COMMIT;
+END add_job;
+/
+
+2.
+CREATE OR REPLACE PROCEDURE upd_job(
+jobid IN jobs.job_id%TYPE,
+jobtitle IN jobs.job_title%TYPE) 
+IS 
+ BEGIN
+UPDATE jobs
+SET	job_title =jobtitle  WHERE	job_id = jobid;
+IF SQL%NOTFOUND THEN
+RAISE_APPLICATION_ERROR(-20202, 'No job updated.');  END IF;
+END upd_job;
+/
+
+3.
+create or replace function valid_dept(
+deptid IN number) 
+return boolean
+IS
+
+did number;
+BEgin
+select 1
+into did
+from departments
+where department_id=deptid;
+return true;
+Exception
+  WHEN NO_DATA_FOUND then
+    return false;
+END valid_dept;
+/
+
+CREATE OR REPLACE PROCEDURE add_employee(  first_name employee.first_name%TYPE,
+last_name  employee.first_name%TYPE;
+email employee.email%TYPE
+job employee.job%TYPE
+mgr  employee.manager_id%TYPE
+sal  employee.salary%TYPE
+comm  employee.commission_pct%TYPE
+deptid employee.dept_id%TYPE
+BEGIN
+IF valid_deptid(deptid) THEN
+INSERT INTO employees(employee_id, first_name, last_name, email,job_id, manager_id, hire_date, salary, commission_pct, department_id)
+VALUES (employees_seq.NEXTVAL, first_name, last_name, email,  job, mgr, TRUNC(SYSDATE), sal, comm, deptid);
+   ELSE
+RAISE_APPLICATION_ERROR (-20204, 'Invalid department ID. Try again.');  END IF;
+END add_employee;
+/
+
+4.
+CREATE OR REPLACE PROCEDURE get_employee(empid IN employees.employee_id%TYPE, sal	OUT employees.salary%TYPE,  job	OUT employees.job_id%TYPE) 
+IS
+      BEGIN
+   SELECT 	salary, job_id  INTO	sal, job
+    FROM	employees
+WHERE	employee_id = empid;  END get_employee;
+/
+Now, execute in anonymous block above procedure.

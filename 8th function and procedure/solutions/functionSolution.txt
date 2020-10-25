@@ -1,0 +1,70 @@
+
+1.
+create or replace function basic_salary
+return number
+IS
+DA number:=1000;
+HRA number:=2200;
+ALLOW number:=3000;
+b_sal number;
+
+BEGIN
+  b_sal := DA+HRA+ALLOW;
+
+   return b_sal;
+END basic_salary;
+/
+
+Execute::
+select basic_salary
+from dual;
+
+--OR
+select basic_salary()+salary,salary
+from employees
+where department_id=90;
+
+2.
+create or replace function max_salary(did IN number)
+return number
+IS
+  m_sal number;
+BEGIN
+  select max(salary)
+  into m_sal
+  from employees
+  where department_id=did;
+
+   return m_sal;
+END max_salary;
+/
+
+
+select max_salary(20)
+from dual;
+
+3.
+CREATE OR REPLACE FUNCTION get_job (jobid IN jobs.job_id%type )
+   RETURN jobs.job_title%type     
+   IS  
+    title jobs.job_title%type;
+     BEGIN
+SELECT job_title  INTO title
+FROM jobs
+WHERE job_id = jobid;  RETURN title;
+    END get_job;
+/
+
+
+4.
+CREATE OR REPLACE FUNCTION get_annual_comp(  sal	IN employees.salary%TYPE,
+comm IN employees.commission_pct%TYPE)  RETURN NUMBER 
+IS
+BEGIN
+RETURN (NVL(sal,0) * 12 + (NVL(comm,0) * nvl(sal,0) * 12));  END get_annual_comp;
+/
+
+   EXECUTING::
+SELECT employee_id, last_name,  get_annual_comp(salary,commission_pct) "Annual Compensation"
+FROM	employees
+WHERE department_id=30;

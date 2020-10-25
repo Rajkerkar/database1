@@ -1,0 +1,224 @@
+1. select last_name,hire_date
+from employees
+where hire_date>(select hire_date
+                 from employees
+		 where last_name = 'Davies');
+
+2.  select employee_id,last_name,hire_date,salary,manager_id
+from employees
+where salary>(select salary
+                 from employees
+		 where last_name = 'Abel');
+
+3.  select employee_id,last_name,job_id,salary
+from employees
+where department_id IN(select department_id
+                 from employees
+		 where last_name = 'Taylor')
+AND
+salary <ANY (select salary
+	  from employees
+	  where last_name = 'Taylor');
+
+4.  select employee_id,last_name,job_id,salary
+from employees
+where salary = (select min(salary)
+	  from employees);
+
+5. select department_id,salary
+from employees
+where salary IN( select max(salary)
+from employees
+group by department_id)
+AND salary>10000
+order by department_id;
+
+6. select employee_id,last_name,department_id,salary
+from employees e1
+where salary In( select max(salary)
+                  from employees e2
+group by department_id
+having e1.department_id = e2.department_id)
+order by department_id;
+
+7:  select max(salary)
+from employees
+where salary<(select max(salary) from employees)
+
+8: select last_name
+from employees e1
+where 1<(select count(last_name)
+from employees e2
+where e1.last_name=e2.last_name);
+
+9:  select salary
+from employees e1
+where (&n)>=(select count(distinct e2.salary)
+ from employees e2
+where e1.salary<=e2.salary)
+
+10. undefine name
+select employee_id,last_name,salary,department_id
+from employees
+where department_id In (select department_id
+	  from employees
+	   where last_name='&name')
+AND
+employee_id Not IN (select employee_id
+	  from employees
+	   where last_name='&name');
+
+OR 
+
+select employee_id,last_name,salary,department_id
+from employees
+where department_id= (select department_id
+	  from employees
+	   where last_name='&&name')
+AND
+employee_id <> (select employee_id
+	  from employees
+	   where last_name='&name');
+
+11. select employee_id,last_name,salary
+from employees
+where salary>(select avg(salary)
+		from employees)
+order by salary;
+
+12.  select employee_id,last_name
+from employees
+where department_id IN( select department_id
+			from employees
+			where last_name LIKE '%u%');
+
+13.  select last_name,department_id,job_id
+from employees
+where department_id IN (select department_id
+			from departments
+			where location_id = 1700);
+
+14.  select last_name,salary
+from employees
+where manager_id IN (select employee_id
+		    from employees
+		    where last_name = 'King');
+
+15.
+select last_name,department_name
+from employees join
+departments
+using(department_id)
+where department_id = (select department_id
+from departments
+where department_name='Executive')
+
+OR
+
+ select last_name,department_name
+from employees join
+departments
+using(department_id)
+where department_name = 'Executive'
+
+16:
+select stateid,statename
+from states
+where stateid = (select state 
+from station
+where id = (select locationid
+from location
+where locationname=upper('Toronto')));
+
+17:
+select statename
+from states
+where stateid = (select state 
+from station
+where city='Fredericktown') ;
+
+18.  select last_name,department_id,salary
+from employees
+where department_id IN(select department_id
+			from employees
+			where commission_pct IS NOT NULL)
+AND
+salary IN (select salary
+	  from employees
+	  where commission_pct IS NOT NULL);
+
+19.  select last_name,department_id,salary,commission_pct
+from employees
+where salary IN(select salary
+             from employees join departments
+		using(department_id)
+	     where location_id=1700)
+AND
+nvl(commission_pct,0) IN (select NVL(commission_pct,0)
+             from employees join departments
+		using(department_id)
+	     where location_id=1700);
+
+20. select last_name,salary,hire_date
+from employees
+where salary =(select salary
+             from employees 
+	     where last_name='Kochhar')
+AND
+nvl(commission_pct,0) = (select NVL(commission_pct,0)
+             from employees 
+	     where last_name='Kochhar')
+AND
+last_name<>'Kochhar';
+
+21.select employee_id,last_name,salary,job_id
+from employees
+where salary >all (select salary
+		from employees
+		where job_id = 'SA_MAN')
+order by salary desc;
+
+22. select employee_id,last_name,department_id
+from employees
+join departments
+using(department_id)
+where department_id IN ( select department_id
+			from departments join
+			locations
+			using(location_id)
+			where city like 'T%');
+
+23.
+select employee_id,last_name,salary,department_id
+from employees e1
+where salary > ( select avg(salary)
+		from employees e2
+		group by department_id
+		having e1.department_id = e2.department_id)
+order by department_id;
+
+24: select employee_id,last_name,
+(select department_name
+from departments d
+where e.department_id = d.department_id) as dept_name
+from employees e;
+
+OR  You can retrieve this using  left outer join if the problem statement do specify scalar sub-query
+
+25:  select last_name "Emp" 
+from employees e
+where department_id IN (select department_id
+			from employees e2
+		where e2.department_id = e.department_id
+		and (e2.salary>e.salary
+		and e2.hire_date >e.hire_date));
+
+OR
+
+select last_name "Emp" 
+from employees e
+where EXISTS (select  'X'
+			from employees e2
+		where e2.department_id = e.department_id
+		and (e2.salary>e.salary
+		and e2.hire_date >e.hire_date));

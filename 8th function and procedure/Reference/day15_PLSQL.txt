@@ -1,0 +1,236 @@
+DECLARE
+   eid number;
+   ename varchar2(20);
+
+   CURSOR emp_details IS
+    select employee_id,last_name
+    from employees;
+   
+BEGIN
+    
+    OPEN emp_details;
+  
+    IF emp_details%ISOPEN  THEN
+  	  
+	    LOOP 
+	    FETCH emp_details 
+	    into eid,ename;
+        	EXIT WHEN emp_details%ROWCOUNT=11;
+	    DBMS_OUTPUT.PUT_LINE('ID :: '||eid||' name:: '||ename);
+	    END LOOP;
+    END IF;
+
+    CLOSE emp_details;
+END;
+/
+--------------------------------------------------------------------
+create or replace function 
+annual_salary(sal IN number)
+return number
+AS
+   ann_sal number;
+begin
+   ann_sal := sal*12;
+
+   return ann_sal;
+END;
+/
+
+
+
+declare
+    sal number;
+    eid number:=&eid;
+
+begin
+   select salary into sal
+   from employees
+   where employee_id=eid;
+
+   DBMS_OUTPUT.PUT_LINE('Annual salary is:: '||annual_salary(sal));
+END;
+/
+-----------------------------------------------------------------------
+		Function without parameter::
+
+create or replace function
+basic_salary
+return number
+AS
+  HRA number:=2000;
+  DA number:=1000;
+  PF number:= 900;
+  
+  b_sal number;
+begin
+
+   b_sal :=  HRA+DA+PF;
+    
+   return b_sal;
+END;
+/
+
+
+declare
+  t_sal number;
+  sal number;
+
+begin
+   select salary into sal
+   from employees
+   where employee_id=&eid;
+
+
+   t_sal := basic_salary+sal;
+  
+   DBMS_OUTPUT.PUT_LINE('Total sal:: '||t_sal);
+END;
+/
+
+or
+
+execute dbms_output.put_line(basic_salary);
+----------------------------------------------------------------------
+		PROCUDURES::
+
+create or replace procedure 
+area_circum(radius IN number,area OUT number,circum OUT number)
+AS
+begin
+   area := radius*radius*3.14;
+   circum := radius*2*3.14;
+
+END;
+/
+
+declare
+   area number;
+   circum number;
+   radius number:=&rad;
+begin
+
+   area_circum(radius,area,circum);
+
+   DBMS_OUTPUT.PUT_LINE('Area:: '||area);
+   DBMS_OUTPUT.PUT_LINE('circum:: '||circum);
+
+END;
+/
+
+-------------------------------------------------------------------
+create or replace procedure
+update_salary(eid IN number,sal IN OUT number)
+as
+ begin
+   
+   update emp_demo
+   set salary = sal
+   where empid=eid;
+
+   commit;
+
+   sal:=0;
+   select salary into sal
+   from emp_demo
+   where empid=eid;
+   
+   DBMS_OUTPUT.PUT_LINE('Updated salary is:: '||sal);
+
+end;
+/
+ 
+declare
+     sal number:=&sal;
+     s number;
+begin
+   s :=sal;
+
+  update_salary(14,sal);
+  
+  DBMS_OUTPUT.PUT_LINE(s);
+
+end;
+/
+----------------------------------------------------
+
+
+create or replace procedure
+emp_details
+as
+
+  cursor emp_king is
+  select employee_id,last_name,salary
+  from employees
+  where last_name='King';
+  
+   emp emp_king%ROWTYPE;
+
+BEGIN
+  OPEN emp_king;
+  
+  LOOP
+  FETCH emp_king into emp;
+     EXIT WHEN emp_king%NOTFOUND;
+  DBMS_OUTPUT.PUT_LINE('Details:: '||emp.employee_id||' '||
+   emp.last_name||' '||emp.salary);
+  END LOOP;
+
+  CLOSE emp_king;
+
+END;
+/
+
+
+
+begin
+   emp_details;
+end;
+/
+
+OR
+
+  execute emp_details;
+--------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
